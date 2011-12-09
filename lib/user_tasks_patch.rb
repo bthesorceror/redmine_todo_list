@@ -11,7 +11,7 @@ module UserTasksPatch
   
   module InstanceMethods
     def tasks_top_menu
-      "Todo List (#{self.tasks.count})"
+      self.tasks.count > 0 ? "Todo List (#{self.tasks.count})" : "Todo List"
     end
   end
 end

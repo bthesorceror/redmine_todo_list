@@ -15,6 +15,8 @@ Redmine::Plugin.register :redmine_user_status do
   description 'Allows you to maintain a personal todo list'
   version '0.0.1'
 
-  menu :top_menu, :todo_list, {:controller => 'tasks', :action => 'index'}, :caption => Proc.new {User.current.tasks_top_menu}, :if => Proc.new { User.current.logged? }
-
+  menu :top_menu, :todo_list, 
+    {:controller => 'tasks', :action => 'index'}, 
+    :caption => Proc.new {User.current.tasks_top_menu}, 
+    :if => Proc.new { User.current.logged? }
 end
