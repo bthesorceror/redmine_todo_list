@@ -1,10 +1,11 @@
 class TasksController < ApplicationController
   unloadable
   
-  accept_key_auth :feed
+  accept_key_auth :feed, :destroy
 
-  before_filter :require_logged, :except => [:feed]
+  before_filter :require_logged, :except => [:feed, :destroy]
   before_filter :require_key, :only => [:feed]
+  before_filter :require_logged_or_key, :only => [:destroy]
   
   def index
     @tasks = User.current.tasks
@@ -21,10 +22,14 @@ class TasksController < ApplicationController
   end
   
   def destroy
-    task = User.current.tasks.find(params[:id])
+    task = @current_user.tasks.find(params[:id])
     task.destroy
-    flash[:notice] = "Task removed!"
-    redirect_to(:action => :index)
+    if params[:key]
+      render :text => "Task Removed!", :status => 200
+    else  
+      flash[:notice] = "Task removed!"
+      redirect_to(:action => :index)
+    end
   end
   
   def feed
@@ -48,6 +53,14 @@ class TasksController < ApplicationController
     unless @current_user
       render :inline => 'Invalid Key'
       return false
+    end
+  end
+  
+  def require_logged_or_key
+    if params[:key]
+      require_key
+    else
+      require_logged
     end
   end
 
