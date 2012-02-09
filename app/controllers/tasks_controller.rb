@@ -31,7 +31,7 @@ class TasksController < ApplicationController
   end
   
   def feed
-    response.headers["Content-Type"] = "application/rss; charset=utf-8"
+    response.headers["Content-Type"] = "application/xml; charset=utf-8"
     @tasks = User.current.tasks
     render :layout => false
   end
